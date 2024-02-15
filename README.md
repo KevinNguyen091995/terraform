@@ -5,6 +5,7 @@
 - 2 Routing Table
 - 1 Application Load Balancer
 - 1 Target Group
+- 2 Security Groups (1 LB, 1 EC2)
 - 2 Linux AMI EC2 Instances
   - Includes .sh userdata to install apache/httpd webserver
 
