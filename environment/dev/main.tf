@@ -2,7 +2,7 @@
 resource "aws_instance" "web_server" {
     ami = var.ami["linux-east"]
     instance_type = var.instance_type["micro-east"]
-    subnet_id = module.network.private_us_east_2a
+    subnet_id = data.terraform_remote_state.network.outputs.public_us_east_2a_id
     vpc_security_group_ids = ["${aws_security_group.web_server_sg.id}"]
     security_groups = [ aws_security_group.web_server_sg.id ]
 
@@ -16,7 +16,7 @@ resource "aws_instance" "web_server" {
 resource "aws_instance" "web_server2" {
     ami = "ami-0b59bfac6be064b78"
     instance_type = "t2.micro"
-    subnet_id = module.network.private_us_east_2b
+    subnet_id = data.terraform_remote_state.network.outputs.public_us_east_2b_id
     vpc_security_group_ids = ["${aws_security_group.web_server_sg.id}"]
     security_groups = [ aws_security_group.web_server_sg.id ]
 
@@ -35,8 +35,8 @@ resource "aws_lb" "web_server_alb" {
     load_balancer_type = "application"
     security_groups = ["${aws_security_group.web_server_alb_sg.id}"]
     subnets = [
-        module.network.private_us_east_2a,
-        module.network.private_us_east_2b,
+        data.terraform_remote_state.network.outputs.public_us_east_2a_id,
+        data.terraform_remote_state.network.outputs.public_us_east_2b_id,
     ]
 }
 
@@ -44,7 +44,7 @@ resource "aws_lb_target_group" "web_server_target_group" {
   name     = "web-server-target-group"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = module.network.main_vpc_id
+  vpc_id   = data.terraform_remote_state.network.outputs.vpc_main_id
 
   health_check {
     path                = "/"
@@ -83,7 +83,7 @@ resource "aws_lb_target_group_attachment" "web_server2_attachment" {
 
 resource "aws_security_group" "web_server_alb_sg" {
     name = "web-server-alb-sg"
-    vpc_id = module.network.main_vpc_id
+    vpc_id = data.terraform_remote_state.network.outputs.vpc_main_id
 
     ingress {
         from_port = 80
@@ -102,7 +102,7 @@ resource "aws_security_group" "web_server_alb_sg" {
 
 resource "aws_security_group" "web_server_sg" {
     name = "web-server-sg"
-    vpc_id = module.network.main_vpc_id
+    vpc_id = data.terraform_remote_state.network.outputs.vpc_main_id
 
     ingress {
         from_port = 0

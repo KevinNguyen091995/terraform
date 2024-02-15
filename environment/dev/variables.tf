@@ -1,7 +1,7 @@
 variable "ami" {
     type = map
     default = {
-        "linux-east" = "ami-0b59bfac6be064b78"
+        "linux-east" = "ami-0c20d88b0021158c6"
     }
 }
 
