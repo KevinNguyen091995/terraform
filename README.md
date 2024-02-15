@@ -1,3 +1,6 @@
+## NOTE:
+- BEST PRACTICE IS TO USE S3/DynamoDB FOR TEAM COLLABERATION
+
 # Design
 - 1 VPC
 - 1 Internet Gateway
